@@ -1,88 +1,49 @@
-#ifndef PRINTF
-#define PRINTF
+#ifndef HOLBERTON_H
+#define HOLBERTON_H
 
-#define BIT_SIZE 8
-#define true 1
-#define false 0
-typedef unsigned int bool;
-/*
- *   a local buffer which will be used
- *   to store data until a syscall is made to write it
- *   in the std out
- */
-#define BUFFER_SIZE 1024
-
-#include <stdarg.h>
+#include <stdio.h>
 #include <stdlib.h>
+#include <stdarg.h>
+#include <limits.h>
 #include <unistd.h>
 
+
+
 /**
-*struct printing_format - a struct for formating info
-*@flag: the flag used (+, -, '\0')
-*@width: the space taken during printing
-*@mod: modifier (l, h)
-*@precision: how manyt points after . in case of f
-*@zero_fill: --
-*@replaced: the total amount the format is holding
-*@validity: is this format a complete format
-*@printer: a function to handle the printing
-*/
-typedef struct printing_format
+ * struct format - match the conversion specifiers for printf
+ * @id: type char pointer of the specifier i.e (l, h) for (d, i, u, o, x, X)
+ * @f: type pointer to function for the conversion specifier
+ *
+ */
+
+typedef struct format
 {
-	char flag;
-	int width;
-	char mod;
-	int precision;
-	bool zero_fill;
-	int replaced;
-	bool validity;
-	char *(*printer)(va_list, struct printing_format *);
-} printing_format;
-/*printer functions*/
-char *_putchar(va_list, printing_format *);
-char *_putstr(va_list, printing_format *);
-char *_putint(va_list, printing_format *);
-char *_putuint(va_list, printing_format *);
-char *_putbin(va_list, printing_format *);
-char *_puthex(va_list, printing_format *);
-char *_putoct(va_list, printing_format *);
-char *_putHex(va_list, printing_format *);
-char *_putadress(va_list, printing_format *);
-char *_putrts(va_list, printing_format *);
-char *_putrot13(va_list, printing_format *);
-char *_putS(va_list, printing_format *);
+	char *id;
+	int (*f)();
+} convert_match;
 
-/*printf and its helpers*/
+int printf_pointer(va_list val);
+int printf_hex_aux(unsigned long int num);
+int printf_HEX_aux(unsigned int num);
+int printf_exclusive_string(va_list val);
+int printf_HEX(va_list val);
+int printf_hex(va_list val);
+int printf_oct(va_list val);
+int printf_unsigned(va_list args);
+int printf_bin(va_list val);
+int printf_srev(va_list args);
+int printf_rot13(va_list args);
+int printf_int(va_list args);
+int printf_dec(va_list args);
+int _strlen(char *s);
+int *_strcpy(char *dest, char *src);
+int _strlenc(const char *s);
+int rev_string(char *s);
+int _strlenc(const char *s);
+int printf_37(void);
+int printf_char(va_list val);
+int printf_string(va_list val);
+int _putchar(char c);
 int _printf(const char *format, ...);
-printing_format *parse_format(const char *);
-int buf_push(char *, int *, char *);
-int *print(const char *, va_list, int *, char *);
 
-/*validity checker*/
-bool is_valid_id(char);
-int checkflag(printing_format *, char);
-int checkwidth(printing_format *, const char *);
-int checkprecision(printing_format *, const char *);
-int checkmod(printing_format *, const char *);
-
-/*parser to identify printing format*/
-printing_format *parse_format(const char *);
-
-/*printer identifier*/
-char *(*get_printer(char id))(va_list, printing_format *);
-
-/*num_utils*/
-int _pow(unsigned int, int);
-int _numLen(unsigned int);
-int max(int, int);
-char *to_hex(int);
-
-/*string utils*/
-int _strlen(char *);
-void rev_string(char *);
-void _toStr(unsigned long int, char *);
-char *_strcpy(char *, char *);
-char *rot13(char *);
-
-#endif /*PINTF*/
-
+#endif
